@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+ name: dev-environment  # The unique name for your namespace
+ labels:
+    environment: development
+    project: roboshop
