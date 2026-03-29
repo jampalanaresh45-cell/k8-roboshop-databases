@@ -8,6 +8,7 @@ data:
     DB_HOST: "mysql"
     DB_USER: "shipping"
     DB_PASS: "secret"
+    DB_NAME: "cities"
 ---
 apiVersion: apps/v1 
 kind: Deployment
