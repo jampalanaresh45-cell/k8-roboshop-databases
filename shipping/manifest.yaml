@@ -53,7 +53,7 @@ spec:
             memory: "512Mi"
         readinessProbe:
           httpGet:
-            path: /health
+            path: /actuator/health
             port: liveness-port
           failureThreshold: 1
           periodSeconds: 15
@@ -61,7 +61,7 @@ spec:
           
         livenessProbe:
           httpGet:
-            path: /health
+            path: /actuator/health
             port: liveness-port
           failureThreshold: 1
           periodSeconds: 15
