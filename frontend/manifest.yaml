@@ -123,14 +123,14 @@ spec:
             port: liveness-port
           failureThreshold: 1
           periodSeconds: 15
-        volumeMounts:
-        - name: nginx-config
-          mountPath: /etc/nginx/
+      #   volumeMounts:
+      #   - name: nginx-config
+      #     mountPath: /etc/nginx/
           
-      volumes:
-      - name: nginx-config
-        configMap:
-          name: frontend      
+      # volumes:
+      # - name: nginx-config
+      #   configMap:
+      #     name: frontend      
 ---
 apiVersion: v1 
 kind: Service
