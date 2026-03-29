@@ -38,6 +38,9 @@ spec:
       - name: shipping
         image: naresh1567/shipping:v1
         imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: shipping
         ports:
         - name: liveness-port
           containerPort: 8080
