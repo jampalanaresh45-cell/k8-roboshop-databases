@@ -41,9 +41,17 @@ spec:
       - name: shipping
         image: naresh1567/shipping:v1
         imagePullPolicy: Always
-        envFrom:
-        - configMapRef:
-            name: shipping
+        env:
+      - name: CART_ENDPOINT
+        value: "cart:8080"
+      - name: DB_HOST
+        value: "mysql"
+      - name: DB_USER
+        value: "shipping"
+      - name: DB_PASSWORD
+        value: "secret"
+      - name: DB_NAME
+        value: "cities"
         ports:
         - name: liveness-port
           containerPort: 8080
