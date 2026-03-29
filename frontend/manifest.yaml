@@ -61,8 +61,8 @@ data:
             location /api/payment/ { proxy_pass http://payment:8080/; }
 
             location /health {
-              stub_status on;
               access_log off;
+              return 200 "OK";
             }
 
         }
