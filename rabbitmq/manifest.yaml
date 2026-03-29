@@ -1,0 +1,89 @@
+## service, headless service, statefulset, pvc  
+apiVersion: v1 
+kind: Service
+metadata:
+    name: rabbitmq
+    namespace: roboshop
+spec:    
+    selector:
+      project: roboshop
+      component: rabbitmq
+      tier: db
+    ports:
+    - protocol: TCP
+      port: 6379 ## service port
+      targetPort: 6379  ## container port
+---
+apiVersion: v1 
+kind: Service
+metadata:
+    name: rabbitmq-headless
+    namespace: roboshop
+spec:  
+    clusterIP: None  
+    selector:
+      project: roboshop
+      component: rabbitmq
+      tier: db
+    ports:
+    - protocol: TCP
+      port: 5672 ## service port
+      targetPort: 5672 ## container port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-headless
+  labels:
+    app: nginx
+    purpose: stateful-demo
+spec:
+  ports:
+  - port: 80
+    name: web
+  selector:
+    app: nginx
+    purpose: stateful-demo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: roboshop
+spec:
+  selector:
+    matchLabels:
+      project: roboshop
+      component: rabbitmq
+      tier: db
+  serviceName: "rabbitmq-headless" ## this should be headless service name
+  replicas: 2 # by default is 1
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        component: rabbitmq
+        tier: db
+
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3
+        volumeMounts:
+        - name: rabbitmq
+          mountPath: /var/lib/rabbitmq ## this is the path where rabbitmq will store data, and it should be same as the path defined in volumeClaimTemplates
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: "roboshop"
+        - name: RABBITMQ_DEFAULT_PASSWORD
+          value: "roboshop123"
+## This is PVC 
+  volumeClaimTemplates:
+  - metadata:
+      name: rabbitmq ## this is the name of PVC, and it will be used in volumeMounts
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "roboshop-ebs"
+      resources:
+        requests:
+          storage: 1Gi
